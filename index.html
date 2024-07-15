@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compte à rebours</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+
+        body {
+            font-family: 'Orbitron', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            margin: 0;
+            color: #a00000;
+            font-size: 5vw;
+            letter-spacing: 0.5vw;
+            overflow: hidden;
+            transition: background-color 1s ease-in-out;
+        }
+        #header {
+            position: absolute;
+            top: 10px;
+            color: #000;
+            font-size: 2vw;
+        }
+        #countdown {
+            text-align: center;
+            transition: opacity 1s ease-in-out;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        #message {
+            display: none;
+            color: red;
+            text-align: center;
+            font-size: 2em;
+            white-space: pre-wrap; /* Preserve spaces */
+        }
+    </style>
+</head>
+<body>
+    <div id="header">@memouleyt</div>
+    <div id="countdown">
+        <span id="days"></span>
+        <span id="hours"></span>
+        <span id="minutes"></span>
+        <span id="seconds"></span>
+    </div>
+    <div id="message"></div>
+
+    <script>
+        const fullMessage = "Le temps n'est qu'une illusion - Albert Einstein";
+        let currentIndex = 0;
+
+        function showNextCharacter() {
+            if (currentIndex < fullMessage.length) {
+                document.getElementById('message').textContent += fullMessage[currentIndex];
+                currentIndex++;
+            }
+        }
+
+        function updateCountdown() {
+            const endDate = new Date('July 27, 2024 13:37:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = endDate - now;
+
+            const days = String(Math.floor(timeLeft / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            const hours = String(Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const minutes = String(Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const seconds = String(Math.floor((timeLeft % (1000 * 60)) / 1000)).padStart(2, '0');
+
+            document.getElementById('days').innerHTML = days;
+            document.getElementById('hours').innerHTML = hours;
+            document.getElementById('minutes').innerHTML = minutes;
+            document.getElementById('seconds').innerHTML = seconds;
+
+            if (timeLeft < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown').classList.add('fade-out');
+                setTimeout(() => {
+                    document.body.style.backgroundColor = '#000';
+                    document.getElementById('countdown').style.display = 'none';
+                    document.getElementById('message').style.display = 'block';
+                    document.addEventListener('keydown', showNextCharacter);
+                }, 1000); // Wait for the fade out transition before showing the message
+            }
+        }
+
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call to display the countdown immediately
+    </script>
+</body>
+</html>
